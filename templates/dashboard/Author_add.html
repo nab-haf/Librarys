@@ -1,0 +1,21 @@
+{%load static%}
+{% include 'dashboard/base_add.html'%}
+<h3 style="text-align: center;">Add Author</h3>
+<div class="row " style="width: 90%;margin-left: 20px;">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Author Add</a></li>
+          
+          </ol>
+        </nav>
+      </div>
+    </div>
+<form method="POST" class="form-control"  enctype='multipart/form-data' style="padding-left: 50px; border: 1px solid rgb(230, 223, 223); border-radius: 5px;  margin: 0 18px;">
+    {% csrf_token %}
+    {{forma}}
+    <button type="submit" style="background:  #daa556; color:white; padding: 15px 50px; 
+            border-radius: 2px; margin-left: 10px;"> Add </button>
+</form>
+

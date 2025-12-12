@@ -1,0 +1,453 @@
+{%load static%}
+{% include 'dashboard/base.html'%}
+  <!-- =======================================================
+  * Template Name: iPortfolio
+  * Template URL: https://bootstrapmade.com/iportfolio-bootstrap-portfolio-websites-template/
+  * Updated: Jun 29 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+
+    <div class="profile-img">
+      <img src="/static/dashboard/img/testimonials/testimonials-3.jpg" alt="" class="img-fluid rounded-circle">
+    </div>
+
+    <a href="/templates/dashboard/" class="logo d-flex align-items-center justify-content-center">
+      <!-- Uncomment the line below if you also wish to use an image logo -->
+      <!-- <img src="{% static 'dashboard/img/logo.png" alt=""> -->
+      <h1 class="sitename">{{user.username}}</h1>
+    </a>
+
+    <div class="social-links text-center">
+      <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
+      <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+      <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="google-plus"><i class="bi bi-skype"></i></a>
+      <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+    </div>
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
+        <li><a href="#about"><i class="bi bi-list navicon"></i>Categories</a></li>
+        <li><a href="#resume"><i class="bi bi-pencil-square navicon"></i> Authors</a></li>
+        <li><a href="{% url 'List_Book' %}"><i class="bi bi-book-half navicon"></i> Books</a></li>
+        <li><a href="#services"><i class="bi bi-people navicon"></i>Members </a></li>     
+        <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
+        <li><a href="{% url 'logout' %}"><i class="bi bi-box-arrow-left navicon"></i> Exit</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background"  style="height: 70vh; min-height:0;">
+
+      <img src="/static/dashboard/img/hero-bg11.jpg" alt="">
+
+      <div class="container "   sdata-aos="fade-up" data-aos-delay="100">
+        <h2>Nab Had</h2>
+        <p>I'm <span class="typed" data-typed-items="Designer, Developer, Freelancer, Photographer">Designer</span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+      </div>
+
+    </section><!-- /Hero Section -->
+<section  class="stats section pt-0">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item">
+              <i class="bi bi-emoji-smile"></i>
+              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>Happy Clients</strong> <span>consequuntur quae</span></p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item">
+              <i class="bi bi-journal-richtext"></i>
+              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>Books Read</strong> <span>consequuntur quae</span></p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item">
+              <i class="bi bi-headset"></i>
+              <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>Hours Of Support</strong> <span>consequuntur quae</span></p>
+            </div>
+          </div><!-- End Stats Item -->
+
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item">
+              <i class="bi bi-people"></i>
+              <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
+              <p><strong>Member</strong> <span>consequuntur quae</span></p>
+            </div>
+          </div><!-- End Stats Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+    <!-- About Section -->
+    <section id="about" class="about section pt-3 pb-3">
+    
+    
+      
+      <!-- Section Title -->
+      <div class="container section-title pb-3" data-aos="fade-up">
+        <h2>Category</h2>
+        
+        <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 justify-content-center">
+         
+          <div class="content">
+           
+             
+            
+            <div class="row">
+                    <div class="col-lg-6 " >
+              <ul>
+              {% for cate in categorys %}
+              <li style="margin-bottom: 10px;">
+            
+            <button onclick="toggleBooks('{{ cate.id }}')" 
+                
+                    style="background:none;border:none;cursor:pointer;font-weight:bold;">
+                    <i  class=" toggleIcon bi bi-chevron-right " onclick="toggleIcon()"></i>
+                {{ cate.name }}
+            </button>
+
+            <span>({{ cate.books.count }} Books)</span>
+
+            
+            <div id="books-{{ cate.id }}" style="display:none; margin-left:20px;">
+
+                {% for book in cate.books.all %}
+                    <p>{{ book.title }}</p>
+                {% empty %}
+                    <p>No books in this category</p>
+                {% endfor %}
+            </div>
+        </li>
+    {% endfor %}
+
+
+
+             </ul>
+            </div>
+             
+                            <div class="col-lg-6">
+              <div class="ad" style="margin: 20px 0;">
+                <a href="{% url 'add_categ'  %}" 
+                  style="background:  #daa556; color:white; padding: 15px 22px; 
+                    border-radius: 2px; margin-left: 10px;">Add New  
+                  <i class="fa fa-plus " 
+                  style="padding: 0 5px;"></i></a>
+                 
+              </div>
+              </div>
+            </div>
+                                
+               
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Stats Section -->
+    
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills section light-background pt-0" style="box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); margin: 0 18px;">
+
+      <!-- Section Title -->
+      <div class="container section-title pb-0" data-aos="fade-up">
+        <h2>Statistics</h2>
+      </div><!-- End Section Title -->
+
+      <div class="container pt-0" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row skills-content skills-animation ">
+
+          <div class="col-lg-6 ">
+            {% for cate in categorys %}
+            <div class="progress">
+              <span class="skill"><span>{{cate.name}}</span> <i class="val">{{ cate.books.count }}% </i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" aria-valuenow="{{ cate.books.count }}" aria-valuemin="0" aria-valuemax="{{Books.count}}"></div>
+              </div>
+            </div><!-- End Skills Item -->
+            {%endfor%}
+
+            
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </section><!-- /Skills Section -->
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Authors</h2>
+        <p>Being an author involves writing various types of content, which can include fiction (novels, short stories), non-fiction (biographies, how-to guides), plays, screenplays, and more. The work also extends beyond writing to include revision, working with editors and publishers, and promoting books to the public.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            {%for aut in author %}
+            <h3 class="resume-title">{{aut.author}}</h3>
+
+            <div class="resume-item pb-0">
+              <h4>{{aut.about}}</h4>
+              <p>One of the author's most important and famous works</p>
+              <ul>
+                {% for book in aut.books.all %}
+                <li>{{book.title}}</li>
+                {%endfor%}
+              </ul>
+            </div><!-- Edn Resume Item -->
+            {%endfor%}
+
+            
+
+                    </div>
+                    <div class="col-lg-6 text-cemter">
+              <div class="ad" style="margin: 200px 160px;">
+                <a href="{% url 'add_auth'  %}" 
+                  style="background:  #daa556; color:white; padding: 50px 22px; 
+                    border-radius: 50%; margin:100px 10px;
+                        border: 6px solid white;">Add New  
+                  <i class="fa fa-plus " 
+                  style="padding: 0 5px;"></i></a>
+                 
+              </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Resume Section -->
+
+   
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Members</h2>
+        <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+          {% for mem in member%}
+          <div class="col-lg-4 col-md-3 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+             <div class="icon flex-shrink-0">
+              <img src="{{mem.image.url}}" alt="" style="width: 50px;height: 50px; border-radius: 50%;">
+            </div>
+            
+           <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200" 
+           style="    box-shadow: 0px 0 30px rgba(0, 0, 0, 0.1);
+               padding: 15px 0; background: white;">
+              <h4 class="title"><a href="#" class="stretched-link p-2" style="text-transform:capitalize;"> {{mem.name}}</a></h4>
+              <ul>
+                <li><strong>Name</strong>: {{mem.name}}</li>
+                <li><strong>About</strong>: {{mem.about}}</li>
+                <li><strong>Project date</strong>: 01 March, 2025</li>
+                <li><strong>Project URL</strong>: <a href="#">{{mem.email}}</a></li>
+              </ul>
+            </div>
+            </div>
+            {%endfor%}
+          
+          <!-- End Service Item -->
+
+          
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+   
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Contact</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-5">
+
+            <div class="info-wrap">
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h3>Address</h3>
+                  <p>A108 Adam Street, New York, NY 535022</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                <i class="bi bi-telephone flex-shrink-0"></i>
+                <div>
+                  <h3>Call Us</h3>
+                  <p>+1 5589 55488 55</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h3>Email Us</h3>
+                  <p>info@example.com</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <label for="name-field" class="pb-2">Your Name</label>
+                  <input type="text" name="name" id="name-field" class="form-control" required="">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email-field" class="pb-2">Your Email</label>
+                  <input type="email" class="form-control" name="email" id="email-field" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <label for="subject-field" class="pb-2">Subject</label>
+                  <input type="text" class="form-control" name="subject" id="subject-field" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <label for="message-field" class="pb-2">Message</label>
+                  <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Loading</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                  <button type="submit">Send Message</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main>
+
+  <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container">
+      <div class="copyright text-center ">
+        <p>© <span>Copyright</span> <strong class="px-1 sitename">NabHad</strong> <span>All Rights Reserved</span></p>
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">Nabila Moh</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+
+  <script>
+function toggleBooks(id) {
+    let box = document.getElementById("books-" + id );
+    box.style.display = (box.style.display === "none") ? "block" : "none";
+}
+
+function toggleIcon() {
+    const icon = document.getElementsByClassName('toggleIcon');
+    if (icon.classList.contains('bi bi-chevron-right')) {
+        icon.classList.remove('bi bi-chevron-right');
+        icon.classList.add('bi bi-chevron-down');
+    } else {
+        icon.classList.remove('bi bi-chevron-down');
+        icon.classList.add('bi bi-chevron-right');
+    }
+}
+</script>
+  <script src="{% static 'dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/php-email-form/validate.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/aos/aos.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/typed.js/typed.umd.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/purecounter/purecounter_vanilla.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/waypoints/noframework.waypoints.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/glightbox/js/glightbox.min.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/imagesloaded/imagesloaded.pkgd.min.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/isotope-layout/isotope.pkgd.min.js'%}"></script>
+  <script src="{% static 'dashboard/vendor/swiper/swiper-bundle.min.js'%}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'dashboard/js/main.js'%}"></script>
+
+</body>
+
+</html>

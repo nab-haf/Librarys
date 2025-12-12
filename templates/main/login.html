@@ -1,0 +1,50 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Login -  Book Store </title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="author" content="">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/normalize.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/icomoon/icomoon.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/vendor.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'main/css/style.css'%}">
+	<!-- <link rel="stylesheet" type="text/css" href="{% static 'main/css/style_t.css'%}"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<body class="bg-light">
+<div class="container d-flex align-items-center justify-content-center vh-100">
+    <div class="card shadow-lg p-4" style="max-width: 800px; width: 40%; border-radius: 20px;">
+        <div class="row g-0">
+
+            <!-- FORM -->
+            <div class="p-4">
+                <h2 class="text-center mb-4">Login</h2>
+
+                {% if error %}
+                    <div class="alert alert-danger">Invalid username or password</div>
+                {% endif %}
+
+                <form method="POST" class="form-control w-100" style="padding-top: 20px;">
+                    {% csrf_token %}
+                   {{form}}
+                    <button class=" w-100">Login</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

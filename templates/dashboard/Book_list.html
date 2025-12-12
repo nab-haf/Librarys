@@ -1,0 +1,111 @@
+{%load static%}
+
+{% include 'dashboard/base_add.html'%}
+  <body >
+   <h2 style="text-align: center;"> Books List </h2>
+
+ <div class="row " style="width: 90%;margin-left: 20px;">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard'%}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Book Add</a></li>
+          
+          </ol>
+        </nav>
+      </div>
+    </div>
+   
+    <div class="members" style="background: #f3f2ec;">
+       <a href="{% url 'add_Book'  %}" 
+           style="background:  #daa556; color:white; padding: 15px 22px; 
+            border-radius: 2px; margin-left: 10px; ">Add New  
+           <i class="fa fa-plus " 
+           style="padding: 0 5px;"></i></a>
+
+      <table class="grid1 "  style="color: #050d18;">
+          <thead >
+            <tr>
+              <th></th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Publisher</th>
+              <th>Date      </th>
+              <th>Category</th>
+              <th>Operations</th>
+            
+
+            </tr>
+          </thead>
+         
+        {% for Book in Books %}
+            <tr>
+              <td>
+                <a href="{% url 'single_book' Book.pk %}"><img
+                  src="{{Book.image.url}}"
+                  alt="" style="width: 50px;"
+                /></a>
+              </td>
+              <td>
+                {{Book.title}}
+              </td>
+              <td>
+                {{Book.author}}
+              
+              </td>
+              <td>{{Book.publisher}}</td>
+              <td>{{Book.date_pub}}</td>
+              
+              <td >
+                {%for ca in Book.categ.all%}
+                    {{ca.name}}
+                {%endfor%}
+                </td>
+            
+                
+                
+              <td><a href="" style ="border: 1px solid rgb(127, 248, 127) ;color:rgb(12, 139, 12) ; padding: 7px 22px;  border-radius: 2px;"> Edit  </a></td>  
+              <td><a href="" style ="border: 1px solid rgb(228, 131, 131) ;color:rgb(230, 109, 109) ; padding: 7px 15px; border-radius: 2px;">Delete</a></td>  
+              {%endfor%}
+      </table>
+  </div>
+  </div>
+
+  <div class="page_n" style="display: flex;
+          justify-content: center; 
+          align-items: center; 
+          margin: 10px;">
+    <nav >
+      <ul class="pagination">
+          <li class="page-item">
+              {% if page_obj.has_previous %}
+                  <a href="?{{ request.GET.urlencode|cut:'page' }}&page=1" style="font-size: 20px; padding-right: 5px;">&laquo;</a>
+                  
+                  <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.previous_page_number }}"></a>
+              {% endif %}
+          </li>
+
+          {% for num in page_obj.paginator.page_range %}
+            <li class="page-item" style="border: 1px solid #daa556; margin:1px;">
+              <a class="page-link" href="?{{ request.GET.urlencode|cut:'page' }}&page={{ num }}">{{ num }}</a>
+          </li>
+          {% endfor %}
+
+          <li class="page-item">
+              {% if page_obj.has_next %}
+                  <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.next_page_number }}"></a>
+                  
+                  <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.paginator.num_pages }} " style="font-size: 20px; padding-left: 5px;">&raquo;</a>
+              {% endif %}
+          </li>
+      </ul>
+  </nav>
+
+  </div>
+    <script src="{% static 'main/js/jquery-1.11.0.min.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"></script>
+    <script src="{% static 'main/js/plugins.js'%}"></script>
+    <script src="{% static 'main/js/script.js'%}"></script>
+</body>

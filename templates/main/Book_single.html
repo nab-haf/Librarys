@@ -1,0 +1,53 @@
+{%load static%}
+{% include 'main/navbar.html'%}
+<body>
+    
+<h4>  <span style="color:  #daa556;">{{member.name}}</span> </h4>
+<section id="single-project">
+   <div class="container">
+      <div class="row">
+       
+         
+
+		<div class="wow fadeInUp col-md-7 col-sm-7" data-wow-delay="2.6s" >
+			 <h1>{{Book.title}}</h1>
+			<img src="{{Book.image.url}}" class="img-responsive" alt="Single Project" style="height: 400px;width: auto; padding-bottom: 20px; ">
+			<p>Ut urna turpis, tempor sit amet massa vitae, pulvinar porttitor magna. Pellentesque dolor lorem, blandit ac congue non, mattis a mi. Vestibulum id accumsan neque. Aenean turpis dui, consectetur in ornare quis, sollicitudin vel mauris. Aliquam eros elit, blandit et tortor non, ornare tincidunt ante.</p>
+			
+			
+		</div>
+		<div class="wow fadeInUp col-md-offset-1 col-md-3 col-sm-offset-1 col-sm-4" data-wow-delay="2.3s" style="padding-top:80px;">
+			<div class="project-info">
+				<h4>Author</h4>
+				<p>{{Book.author}}</p>
+			</div>
+			<div class="project-info">
+				<h4>Date</h4>
+				<hp>{{Book.date_pub}}</p>
+			</div>
+			<div class="project-info">
+				<h4>Publisher</h4>
+				<p>{{Book.publisher}}</p>
+			</div>
+			<div class="project-info">
+				<h4>Category</h4>
+				{%for ca in Book.categ.all%} <p style="color: #daa556;;">{{ca.name}}</p> {%endfor%}</p>
+				
+			</div>
+		</div>
+
+      </div>
+   </div>
+</section>
+
+
+
+
+ <script src="{% static 'main/js/jquery-1.11.0.min.js'%}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+		crossorigin="anonymous"></script>
+	<script src="{% static 'main/js/plugins.js'%}"></script>
+	<script src="{% static 'main/js/script.js'%}"></script>
+
+    </body>

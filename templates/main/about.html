@@ -1,0 +1,130 @@
+{%load static%}
+{% include 'main/navbar.html'%}
+ <div class="row" style="background: url(/static/dashboard/img/hero-bg.jpg); height: 300px;">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-3 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'homepage'%}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">About</a></li>
+          </ol>
+        </nav>
+      </div>
+      <h1 style="text-align: center; color: white; ">About Us</h1>
+    </div>
+
+<!-- Page Header Start -->
+
+    <!-- Page Header End -->
+
+
+    <!-- Feature Start -->
+    <div class="container-xxl py-5 ">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center justify-content-center " style="width: 60px; height: 60px;">
+                            <i class="fa fa-user fa-2x text-primary"></i>
+                        </div>
+                        <h1 class="display-1 text-drak mb-0">01</h1>
+                    </div>
+                    <h3>Creative Members</h3>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="width: 60px; height: 60px;">
+                            <i class="fa fa-check fa-2x text-primary"></i>
+                        </div>
+                        <h1 class="display-1 text-drak mb-0">02</h1>
+                    </div>
+                    <h3>Rare Books</h3>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="width: 60px; height: 60px;">
+                           <i class="fa fa-compress fa-2x text-primary"></i>
+                        </div>
+                        <h1 class="display-1 text-drak mb-0">03</h1>
+                    </div>
+                    <h3>Free Register</h3>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="width: 60px; height: 60px;">
+                            <i class="fa fa-headphones fa-2x text-primary"></i>
+                        </div>
+                        <h1 class="display-1 text-drak mb-0">04</h1>
+                    </div>
+                    <h3>Customer Support</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Feature Start -->
+
+
+
+    <!-- About Start -->
+    <div class="container-fluid bg-light overflow-hidden my-5 px-lg-0">
+        <div class="container about px-lg-0">
+            <div class="row g-0 mx-lg-0">
+                <div class="col-lg-6 ps-lg-0" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="position-absolute img-fluid w-100 h-100" src="/static/dashboard/img/lib.jpg" style="object-fit: cover;" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 about-text py-5 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="p-lg-5 pe-lg-0">
+                        <div class="section-title text-start">
+                            <h1 class="display-5 mb-4">About Us</h1>
+                        </div>
+                        <p class="mb-4 pb-2">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo erat amet</p>
+                        <div class="row g-4 mb-4 pb-2">
+                            <div class="col-sm-6 wow fadeIn" data-wow-delay="0.1s">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white" style="width: 60px; height: 60px;">
+                                        <i class="fa fa-users fa-2x text-primary"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h2 class="text-primary mb-1" data-toggle="counter-up">1234</h2>
+                                        <p class="fw-medium mb-0">Happy Clients</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 wow fadeIn" data-wow-delay="0.3s">
+                                <div class="d-flex align-items-center">
+                                    <div class="d-flex flex-shrink-0 align-items-center justify-content-center bg-white" style="width: 60px; height: 60px;">
+                                        <i class="fa fa-check fa-2x text-primary"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h2 class="text-primary mb-1" data-toggle="counter-up">1234</h2>
+                                        <p class="fw-medium mb-0">Books Read</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="" class="btn btn-primary py-3 px-5">Explore More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Team Start -->
+    <hr>
+	<h4 style="padding-left: 20px;">_______________________________________________________________________________________________________________</h4>
+	
+    {% include 'main/footer.html'%}
+	
+			</div>
+		</div>
+	</div>
+
+	<script src="{% static 'main/js/jquery-1.11.0.min.js'%}"></script>
+	
+	<script src="{% static 'main/js/plugins.js'%}"></script>
+	<script src="{% static 'main/js/script.js'%}"></script>
+
+</body>

@@ -1,0 +1,136 @@
+{%load static%}
+{% include 'main/navbar.html'%}
+
+ <h2 style="text-align: center; line-height: 0;">All Books</h2>  
+ 
+ 
+
+<div class="filter" style="  padding: 10px;">
+  <div class="row">
+    <form class="form_inlie form-control mr-5" method = "GET" action = "{% url 'all' %}">
+       <div class="col-md-4">
+        <label >Category</label>
+          
+        <!-- {% csrf_token %} -->
+        <select name="category"  class="form-select" >
+            <option value="">All Category</option>
+          
+            {% for categ in categorys %}
+                <option value="{{ categ.id }}"
+                        {% if request.GET.category == categ.id|stringformat:"s" %}
+                            selected
+                        {% endif %}>
+                    {{ categ.name }}
+                </option>
+            {% endfor %}
+        </select>
+        </div>
+
+         <div class="col-md-4">   
+        <label >Author</label>
+          
+        <!-- {% csrf_token %} -->
+        <select name="author"  class="form-select" >
+            <option value="">All Author</option>
+          
+            {% for aut in authors %}
+                <option value="{{ aut.id }}"
+                        {% if request.GET.author == aut.id|stringformat:"s" %}
+                            selected
+                        {% endif %}>
+                        {{ aut.author }}
+                </option>
+            {% endfor %}
+        </select>
+        </div>
+
+   <input  type = "submit" value="Filter">
+    
+ </form>
+</div>
+</div>
+
+
+<div class="members" style="background:  #f3f2ec; color: #050d18;">
+    <table class="grid1" >
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Date</th>
+            <th>Category</th>
+            <th>Active</th>
+          </tr>
+        </thead>
+        
+       {% for Book in page_obj %}
+          <tr>
+            <td>
+              <a href="{% url 'single_book' Book.pk %}"><img
+                src="{{Book.image.url}}"
+                alt="" style="width: 50px;"
+              /></a>
+            </td>
+            <td>
+              {{Book.title}}
+            </td>
+            <td>
+              {{Book.author}}
+            
+            </td>
+            <td>{{Book.publisher}}</td>
+            <td>{{Book.date_pub}}</td>
+            <td >
+              {%for ca in Book.categ.all%}
+                   {{ca.name}}
+               {%endfor%}
+              </td>
+            <td >
+             {% if Book.title in borrowed_books %}
+                   <a href="" style="color: rgb(248, 11, 11);">Inactive</a>
+                {% else %}
+                  <a href="{%url 'loginmem' Book.pk %}" style="color: rgb(129, 218, 121);">Activate</a>
+                {% endif%} 
+             
+            </td>
+          </tr>
+       {%endfor%}
+    </table>
+</div>
+  </div>
+
+
+<div class="page_n" style="display: flex;
+        justify-content: center; 
+        align-items: center; 
+        margin: 10px;">
+  <nav >
+    <ul class="pagination">
+        <li class="page-item">
+            {% if page_obj.has_previous %}
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page=1" style="font-size: 20px; padding-right: 5px;">&laquo;</a>
+                
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.previous_page_number }}"></a>
+            {% endif %}
+        </li>
+
+        {% for num in page_obj.paginator.page_range %}
+           <li class="page-item" style="border: 1px solid #daa556; margin:1px;">
+            <a class="page-link" href="?{{ request.GET.urlencode|cut:'page' }}&page={{ num }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        <li class="page-item">
+            {% if page_obj.has_next %}
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.next_page_number }}"></a>
+                
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.paginator.num_pages }} " style="font-size: 20px; padding-left: 5px;">&raquo;</a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
+
+</div>
+ <!-- {% include 'main/footer.html'%} -->
