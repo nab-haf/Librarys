@@ -14,6 +14,14 @@ urlpatterns = [
     path('About',views.aboutpageview.as_view(),name='about'),
 
     path('list/',views.booklistview.as_view(),name='List_Book'),
+    
+    path('books/add',views.BookCreateView.as_view(),name='books_add'),
+    
+    path('books/edit/<int:pk>',views.BookUpdateView.as_view(),name='books_edit'),
+
+    path('books/detail/<int:pk>',views.BookDetailView.as_view(),name='books_detail'),
+    
+    path('books/Delete/<int:pk>',views.BookDeleteView.as_view(),name='books_delete'),
 
     path('login/',views.login_view,name='login'),
     

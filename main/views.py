@@ -4,8 +4,9 @@ from .models import Category,Author,Book,Borrowing,Member
 from django.contrib.auth import authenticate,login,logout
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from .forms import loginform,loginmember,bookform ,categoryform,authorform,memberform
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, TemplateView,CreateView,UpdateView,DeleteView,DetailView
 from django.db.models import Count
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -13,10 +14,10 @@ import base64
 
 # Create your views here.
 
-def Index(requset):
+def Index(request):
     categ=Category.objects.all()
     book=Book.objects.all()
-    return render(requset,'main/index.html',{'categorys':categ ,'Books':book})
+    return render(request,'main/index.html',{'categorys':categ ,'Books':book})
 
 def Category_Books(request,cate):
    
@@ -30,6 +31,14 @@ class HomePage(TemplateView):
    def get_context_data(self,**kwargs):
       context=super().get_context_data(**kwargs)
       context['Books']=Book.objects.all()
+
+      cat_id =self.request.GET.get('cat')
+
+      if cat_id:
+            context['books_by_category'] =  Book.objects.filter(categ__id=cat_id)
+      else:
+          context['books_by_category'] =  Book.objects.all()
+
       context['Books_new']=Book.objects.order_by('date_pub')[:3]
       context['category']=Category.objects.all()
       context['Book_cu']=context['Books_new'].annotate(num_book=Count('title'))
@@ -39,9 +48,9 @@ class HomePage(TemplateView):
    
 
 
-def contact(requset):
+def contact(request):
    
-    return render(requset,'main/Contact.html')
+    return render(request,'main/Contact.html')
 
 
 class booklistview(ListView):
@@ -49,7 +58,6 @@ class booklistview(ListView):
    template_name='dashboard/Book_list.html'
    context_object_name='Books'
    ordering=['title']
-
    paginate_by=3
 
 
@@ -57,6 +65,28 @@ class aboutpageview(TemplateView):
    template_name='main/about.html'
 
 
+class BookCreateView(CreateView):
+   model=Book
+   fields=['title','date_pub','publisher','description','image','categ','author','page_num','file']
+   template_name='dashboard/Book_add.html'
+   success_url=reverse_lazy('List_Book')
+
+class BookUpdateView(UpdateView):
+   model=Book
+   fields=['title','date_pub','publisher','description','image','categ','author','page_num','file']
+   template_name='dashboard/Book_detail.html'
+   success_url=reverse_lazy('List_Book')
+
+class BookDeleteView(DeleteView):
+   model=Book
+   template_name='dashboard/Book_delete.html'
+   success_url=reverse_lazy('List_Book')
+
+
+class BookDetailView(DetailView):
+   model=Book
+   template_name='main/Book_single.html'
+   
 
 
 def all(request):
@@ -99,26 +129,26 @@ def all(request):
                    'borrowed_books': borrowed_books })
 
 
-def login_view(requset):
+def login_view(request):
     login_form=loginform()
-    if requset.method=="POST":
-        username=requset.POST.get("username")
-        password=requset.POST.get("password")
+    if request.method=="POST":
+        username=request.POST.get("username")
+        password=request.POST.get("password")
 
-        user=authenticate(requset,username=username,password=password)
+        user=authenticate(request,username=username,password=password)
 
         if user is not None:
-            login(requset,user)
+            login(request,user)
            
             return redirect("dashboard")
         else:
-            return render(requset,'main/login.html',{'error':"Inalid credentials",'form':login_form})
+            return render(request,'main/login.html',{'error':"Invalid credentials",'form':login_form})
         
-    return render(requset,"main/login.html",{'form':login_form})    
+    return render(request,"main/login.html",{'form':login_form})    
 
 
-def logout_view(requset):
-    logout(requset)
+def logout_view(request):
+    logout(request)
     return redirect("/")
 
 def single_book(request,id):
@@ -154,35 +184,35 @@ def category_detail(request,cate):
     return render(request, 'dashboard/index.html', context)
 
 
-def login_member(requset,id):
+def login_member(request,id):
 
     login_for=loginmember()
    
 
-    if requset.method=="POST":
-        name1=requset.POST.get("membername")
-        password=requset.POST.get("password")
+    if request.method=="POST":
+        name1=request.POST.get("membername")
+        password=request.POST.get("password")
         memb=Member.objects.all()
         for member in memb :       
            if  member.name==str(name1) and member.password==str(password) :
                Books1=get_object_or_404(Book, pk=id)
                memb1=get_object_or_404(Member,name=name1)
-               return render(requset,'main/Book_member.html',{'Book':Books1,'member':memb1})
+               return render(request,'main/Book_member.html',{'Book':Books1,'member':memb1})
 
     
            
-        return render(requset,'main/loginmember.html',{'error':"Inalid credentials",'form':login_for})
+        return render(request,'main/loginmember.html',{'error':"Invalid credentials",'form':login_for})
         
-    return render(requset,"main/loginmember.html",{'form':login_for})    
+    return render(request,"main/loginmember.html",{'form':login_for})    
 
-def login_memberf(requset):
+def login_memberf(request):
 
     login_for=loginmember()
    
 
-    if requset.method=="POST":
-        name1=requset.POST.get("membername")
-        password=requset.POST.get("password")
+    if request.method=="POST":
+        name1=request.POST.get("membername")
+        password=request.POST.get("password")
         memb=Member.objects.all()
         for member in memb :  
              
@@ -193,13 +223,13 @@ def login_memberf(requset):
 
                borrow_r = Borrowing.objects.filter(member_id=memb1.id)
 
-               return render(requset,'main/profilemember.html',{'Book':Books1,'member':memb1,'Borrow':borrow ,'borrow_r':borrow_r})
+               return render(request,'main/profilemember.html',{'Book':Books1,'member':memb1,'Borrow':borrow ,'borrow_r':borrow_r})
 
             
            
-        return render(requset,'main/loginmember.html',{'error':"Inalid credentials",'form':login_for})
+        return render(request,'main/loginmember.html',{'error':"Inalid credentials",'form':login_for})
         
-    return render(requset,"main/loginmember.html",{'form':login_for})    
+    return render(request,"main/loginmember.html",{'form':login_for})    
 
 
 def pdf_page(request,id):
@@ -235,28 +265,28 @@ def profile_memb(request,name):
 
 
  
-def Register(requset):
+def Register(request):
     
-   if (requset.POST) :
+   if (request.POST) :
     
-    add_form=memberform(requset.POST,requset.FILES)
+    add_form=memberform(request.POST,request.FILES)
       
     if(add_form.is_valid()):
-        name=requset.POST.get("name")
+        name=request.POST.get("name")
         add_form.save()
         return redirect('profile',name=name)
 
    else :
        add_form=memberform()
 
-   return render(requset,'main/add_member.html',{'form':add_form})
+   return render(request,'main/add_member.html',{'form':add_form})
 
 
 @login_required(login_url='/login/')
-def book_add(requset):
+def book_add(request):
     
-   if (requset.POST) :
-    add_form=bookform(requset.POST,requset.FILES)  
+   if (request.POST) :
+    add_form=bookform(request.POST,request.FILES)  
     if(add_form.is_valid()):
         add_form.save()
         return redirect('dashboard')
@@ -264,15 +294,15 @@ def book_add(requset):
    else :
        add_form=bookform()
 
-   return render(requset,'dashboard/Book_add.html',{'form':add_form})
+   return render(request,'dashboard/Book_add.html',{'form':add_form})
 
 
 
 @login_required(login_url='/login/')
-def categ_add(requset):
+def categ_add(request):
     
-   if (requset.POST) :
-    categ_form=categoryform(requset.POST,requset.FILES)  
+   if (request.POST) :
+    categ_form=categoryform(request.POST,request.FILES)  
     if(categ_form.is_valid()):
         categ_form.save()
         return redirect('dashboard')
@@ -281,15 +311,15 @@ def categ_add(requset):
        categ_form=categoryform()
     #    print(categ_form.errors.as_data()) # here you print errors to terminal
 
-   return render(requset,'dashboard/add_category.html',{'formc':categ_form})
+   return render(request,'dashboard/add_category.html',{'formc':categ_form})
 
 
 @login_required(login_url='/login/')
-def author_add(requset):
+def author_add(request):
     
 
-   if (requset.POST) :
-    add_form=authorform(requset.POST,requset.FILES)  
+   if (request.POST) :
+    add_form=authorform(request.POST,request.FILES)  
     if(add_form.is_valid()):
         add_form.save()
         return redirect('dashboard')
@@ -297,7 +327,7 @@ def author_add(requset):
    else :
        add_form=authorform()
 
-   return render(requset,'dashboard/Author_add.html',{'forma':add_form})
+   return render(request,'dashboard/Author_add.html',{'forma':add_form})
 
 
 # @login_required

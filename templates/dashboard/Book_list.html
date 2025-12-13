@@ -17,11 +17,15 @@
     </div>
    
     <div class="members" style="background: #f3f2ec;">
+      
        <a href="{% url 'add_Book'  %}" 
            style="background:  #daa556; color:white; padding: 15px 22px; 
             border-radius: 2px; margin-left: 10px; ">Add New  
            <i class="fa fa-plus " 
            style="padding: 0 5px;"></i></a>
+
+           <!-- ListView -->
+           <a href="{%url 'books_add'%}">add</a>
 
       <table class="grid1 "  style="color: #050d18;">
           <thead >
@@ -64,8 +68,8 @@
             
                 
                 
-              <td><a href="" style ="border: 1px solid rgb(127, 248, 127) ;color:rgb(12, 139, 12) ; padding: 7px 22px;  border-radius: 2px;"> Edit  </a></td>  
-              <td><a href="" style ="border: 1px solid rgb(228, 131, 131) ;color:rgb(230, 109, 109) ; padding: 7px 15px; border-radius: 2px;">Delete</a></td>  
+              <td><a href="{%url 'books_edit' Book.pk %}" style ="border: 1px solid rgb(127, 248, 127) ;color:rgb(12, 139, 12) ; padding: 7px 22px;  border-radius: 2px;"> Edit  </a></td>  
+              <td><a href="{%url 'books_delete' Book.pk %}" style ="border: 1px solid rgb(228, 131, 131) ;color:rgb(230, 109, 109) ; padding: 7px 15px; border-radius: 2px;">Delete</a></td>  
               {%endfor%}
       </table>
   </div>

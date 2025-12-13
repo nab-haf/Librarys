@@ -171,19 +171,33 @@
 					</div>
 
 					<ul class="tabs">
-                      
-						<li data-tab-target="#all-genre" class="active tab">All Genre</li>
-                       {% for cate in category %}  
-						<a href=""><li data-tab-target="#{{cate.name}}" class="tab">{{cate.name}}</li></a>
-					   {%endfor%}	
-					</ul>
+
+    <!-- All Genre -->
+    <li class="tab {% if not request.GET.cat %}active{% endif %}">
+        <a href="{% url 'homepage' %}#popular-books">
+            All Genre
+        </a>
+    </li>
+
+
+    {% for cate in category %}
+        <li class="tab {% if request.GET.cat == cate.id|stringformat:'s' %}active{% endif %}">
+            <a href="{% url 'homepage' %}?cat={{ cate.id }}#popular-books">
+                {{ cate.name }}
+            </a>
+        </li>
+    {% endfor %}
+
+</ul>
+
+
                     
 					<div class="tab-content">
 						
 						<div id="all-genre" data-tab-content class="active">
 							
 							<div class="row">
-                             {% for book in Books %}
+                             {% for book in books_by_category %}
 								<div class="col-md-3">
 									<div class="product-item">
 										<figure class="product-style">
@@ -200,6 +214,7 @@
 								{%empty%}
 								  <h3 style="text-align: center;">There are no items to display.</h3>
 								{%endfor%}
+
 							</div>
 						
 						
