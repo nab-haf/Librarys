@@ -110,7 +110,7 @@
     <ul class="pagination">
         <li class="page-item">
             {% if page_obj.has_previous %}
-                <a href="?{{ request.GET.urlencode|cut:'page' }}&page=1" style="font-size: 20px; padding-right: 5px;">&laquo;</a>
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page=1" style="border: 1px solid #daa556; margin:1px;font-size: 20px; padding-right: 5px;">&laquo;</a>
                 
                 <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.previous_page_number }}"></a>
             {% endif %}
@@ -126,7 +126,7 @@
             {% if page_obj.has_next %}
                 <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.next_page_number }}"></a>
                 
-                <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.paginator.num_pages }} " style="font-size: 20px; padding-left: 5px;">&raquo;</a>
+                <a href="?{{ request.GET.urlencode|cut:'page' }}&page={{ page_obj.paginator.num_pages }} " style="border: 1px solid #daa556; margin:1px; font-size: 20px; padding-left: 5px;">&raquo;</a>
             {% endif %}
         </li>
     </ul>

@@ -26,11 +26,18 @@ class Book(models.Model):
     author=models.ForeignKey(Author,on_delete=models.CASCADE,related_name='books')
     page_num=models.IntegerField()
     file = models.FileField(upload_to='files',null=True)
+   
+    class  Mate:
 
-
+        permissions = [
+        ('can_publish', 'Can publish '),
+        ('can_edit_published', 'Can edit published '),
+    ]    
+        
     def __str__(self):
         return str(self.title)
-    
+
+  
 # class Bookcop(models.Model):
 #     un_id=models.IntegerField(unique=True)
 #     book_id=models.ForeignKey(Book,on_delete=models.CASCADE)

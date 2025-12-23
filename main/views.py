@@ -2,6 +2,7 @@ from itertools import count
 from django.shortcuts import render ,get_object_or_404 ,redirect
 from .models import Category,Author,Book,Borrowing,Member
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.models import Permission,User
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -11,9 +12,300 @@ from django.db.models import Count
 from django.core.paginator import Paginator
 from django.http import Http404
 import base64
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
+from guardian.shortcuts import  assign_perm,get_objects_for_user
 
 # Create your views here.
 
+# start class based view--------------------------------------------------------------------
+class ListViewGeneric(ListView):
+
+    template_name = "dash/ListView.html"
+    
+    model_name = None
+    fields = []
+    headers = []
+    columns = None
+    add_url = None
+    update_url = None
+    delete_url = None
+    detail_url = None
+    show_add_button=None
+    permission_required=None
+    all_permissions = PermissionRequiredMixin
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_add_button']=self.request.user.has_perm()
+        context["model_name"] = self.model_name
+        context['columns'] = self.columns
+        context["fields"] = self.fields
+        context["headers"] = self.headers
+        context["add_url"] = self.add_url
+        context['update_url'] = self.update_url 
+        context['delete_url'] = self.delete_url
+        context['detail_url'] = self.detail_url
+        
+        context["objects"] = context["object_list"]
+        return context 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['show_add_button']=self.request.user.has_perm()
+        context["model_name"] = self.model_name
+        context['columns'] = self.columns
+        context["fields"] = self.fields
+        context["headers"] = self.headers
+        context["add_url"] = self.add_url
+        context['update_url'] = self.update_url 
+        context['delete_url'] = self.delete_url
+        context['detail_url'] = self.detail_url
+        
+        context["objects"] = context["object_list"]
+
+        # def get_queryset(self):
+        #      permission = self.get_required_permission()
+
+        #      if self.request.user.has_perm(permission):
+        #         return get_objects_for_user(
+        #         self.request.user,
+        #         permission,
+        #         self.model
+        #         )
+
+        # context['user_permissions_list']=self.request.user.get_all_permissions()
+        # permission for all model
+
+        context["can_view"] = self.request.user.has_perm(
+                            f"{self.model._meta.app_label}.view_{self.model._meta.model_name}"
+                             )
+        context["can_add"] = self.request.user.has_perm(
+                            f"{self.model._meta.app_label}.add_{self.model._meta.model_name}"
+                             )
+        context["can_change"] = self.request.user.has_perm(
+                            f"{self.model._meta.app_label}.change_{self.model._meta.model_name}"
+                             )
+        context["can_delete"] = self.request.user.has_perm(
+                            f"{self.model._meta.app_label}.delete_{self.model._meta.model_name}"
+                             )
+        return context 
+
+
+class BaseFormView:
+
+    list_url_name=None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model._meta.verbose_name.title()
+        context['list_url'] = self.list_url_name
+        return context
+
+
+class BookListView(ListViewGeneric):
+    model=Book
+    model_name = "Book"
+    # columns=['title','author','categ']
+    columns = ["image","title", "author"]
+    headers = [" Book ","Title", "Author"]
+    add_url = reverse_lazy("books_add")
+    update_url = ("update_book")
+    delete_url = ("delete_book")
+    detail_url = ("book_detail") 
+    
+    print(PermissionRequiredMixin)
+    Permission_required='main.view_book'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['show_add_button']=self.request.user.has_perm("main.view_category")
+        context['user_permissions_list']=self.request.user.get_all_permissions()
+        return context 
+    
+    # def get_queryset(self):
+    #     return get_objects_for_user(
+    #     self.request.user,
+    #     self.request.user.get_all_permissions(),
+    #     Book
+    #     )
+    
+
+class CategoryListView(ListViewGeneric):
+    model=Category
+    model_name = "Category"
+    columns = ["name"]
+    headers = ["Category Name "]
+    add_url = reverse_lazy("add_categ") 
+    update_url = ("update_category")
+    delete_url = ("delete_category")
+    detail_url = ("category_detail")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['show_add_button']=self.request.user.has_perm("main.view_category")
+        context['user_permissions_list']=self.request.user.get_all_permissions()
+        return context 
+
+class AuthorListView(ListViewGeneric):
+    model=Author
+    model_name = "Author"
+   
+    columns = ['author','about']
+    headers = ['Author Name','About']
+    add_url = reverse_lazy("add_auth") 
+    update_url = ("update_author")
+    delete_url = ("delete_author")
+    detail_url = ("author_detail")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['show_add_button']=self.request.user.has_perm("main.view_category")
+        context['user_permissions_list']=self.request.user.get_all_permissions()
+        return context 
+
+
+
+class AddBookViews(BaseFormView,PermissionRequiredMixin,CreateView):
+    model=Book
+    list_url_name = 'books' 
+    fields=['title','date_pub','publisher','description','image','categ','author','page_num','file']
+    template_name = "dash/base_form.html"
+    success_url = reverse_lazy("books")
+
+    Permission_required="main.view_book"
+
+    def form_valid(self,form):
+        response=super().form_valid(form)
+        assign_perm('view_book', self.request.user,self.object)
+        assign_perm('change_book', self.request.user,self.object)
+        assign_perm('delete_book', self.request.user,self.object)
+        return  response
+
+    
+class BookUpdateViews(BaseFormView,UpdateView):
+   model=Book
+   list_url_name = 'books' 
+   fields=['title','date_pub','publisher','description','image','categ','author','page_num','file']
+   template_name='dash/base_form.html'
+   success_url = reverse_lazy("books")
+
+class BookDeleteViews(BaseFormView,DeleteView):
+   model=Book
+   list_url_name = 'books' 
+   template_name='dash/conf_delete.html'
+   success_url = reverse_lazy("books")
+
+#    categories
+class AddCategoryViews(BaseFormView,CreateView):
+    model=Category
+    list_url_name = 'categories' 
+    fields=['name']
+    template_name = "dash/base_form.html"
+    success_url = reverse_lazy("categories'")
+    
+class CategoryUpdateViews(BaseFormView,UpdateView):
+   model=Category
+   list_url_name="categories"
+   fields=['name']
+   template_name='dash/base_form.html'
+   success_url = reverse_lazy("categories")
+   
+
+class CategoryDeleteViews(BaseFormView,DeleteView):
+   model=Category
+   list_url_name = "categories"
+   template_name='dash/conf_delete.html'
+   success_url = reverse_lazy("categories")
+
+#    Authors
+class AddAuthorViews(BaseFormView,CreateView):
+    model=Author
+    model_name = "Author"
+    list_url_name = 'authors' 
+    fields=['author','about']
+    template_name = "dash/base_form.html"
+    success_url = reverse_lazy("authors")
+    
+class AuthorUpdateViews(BaseFormView,UpdateView):
+   model=Author
+   list_url_name = 'authors' 
+#    model_name = "Author"
+   fields=['author','about']
+   template_name='dash/base_form.html'
+   success_url = reverse_lazy("authors")
+
+   
+
+class AuthorDeleteViews(BaseFormView,DeleteView):
+   model=Author
+   model_name = "Author"
+   list_url_name = 'authors' 
+   template_name='dash/conf_delete.html'
+   success_url = reverse_lazy("authors")
+
+class DetailViewGeneric (DetailView):
+    model = None
+    template_name = "dash/Detailobj.html"
+    context_object_name = "object"
+    list_url = None
+    update_url = None
+    delete_url = None
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__
+        context['list_url'] = self.list_url
+        context['update_url'] = self.update_url
+        context['delete_url'] = self.delete_url
+        context['model_name'] = self.model._meta.verbose_name.title()
+        context['fields'] = [field for field in self.object._meta.get_fields() if field.concrete]
+        fields_info = []
+        for field in self.object._meta.get_fields():
+            if not getattr(field, 'concrete', False):
+                continue
+            value = getattr(self.object, field.name)
+            fields_info.append({
+                'label': field.verbose_name,
+                'value': value,
+                'is_image': field.__class__.__name__ == "ImageField",
+                'is_many_to_many': field.__class__.__name__ == "ManyToManyField",
+            })
+        context['fields_info'] = fields_info
+
+        return context
+
+class BookDetailViews(DetailViewGeneric):
+    model = Book
+    template_name = "dash/Detailobj.html"
+    context_object_name = "book"
+    list_url = "books"
+    update_url = "update_book"
+    delete_url = "delete_book"
+
+
+
+class CategoryDetailView(DetailViewGeneric):
+    model = Category
+    template_name = "dash/Detailobj.html"
+    context_object_name = "category"
+    list_url = "categories"
+    update_url = "update_category"
+    delete_url = "delete_category"
+
+class AuthorDetailView(DetailViewGeneric):
+    model = Author
+    template_name = "dash/Detailobj.html"
+    context_object_name = "author"
+    list_url = "authors"
+    update_url = "update_author"
+    delete_url = "delete_author"
+
+# end class based view--------------------------------------------------------------
+    
 def Index(request):
     categ=Category.objects.all()
     book=Book.objects.all()
@@ -59,7 +351,7 @@ class booklistview(ListView):
    context_object_name='Books'
    ordering=['title']
    paginate_by=3
-
+   
 
 class aboutpageview(TemplateView):
    template_name='main/about.html'
@@ -140,7 +432,7 @@ def login_view(request):
         if user is not None:
             login(request,user)
            
-            return redirect("dashboard")
+            return redirect("dash")
         else:
             return render(request,'main/login.html',{'error':"Invalid credentials",'form':login_form})
         
@@ -149,7 +441,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("/")
+    return redirect("admin-site")
 
 def single_book(request,id):
    Books1=get_object_or_404(Book,pk=id)

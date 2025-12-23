@@ -17,6 +17,15 @@ urlpatterns = [
     
     path('books/add',views.BookCreateView.as_view(),name='books_add'),
     
+    path('dash/',views.BookListView.as_view(),name='dash'),
+    
+    path('books/',views.BookListView.as_view(),name='book_list'),
+    
+    path('category/',views.CategoryListView.as_view(),name='list_cate'),
+    
+    path('author/',views.AuthorListView.as_view(),name='list_auth'),
+    
+    
     path('books/edit/<int:pk>',views.BookUpdateView.as_view(),name='books_edit'),
 
     path('books/detail/<int:pk>',views.BookDetailView.as_view(),name='books_detail'),
@@ -52,5 +61,27 @@ urlpatterns = [
     path("Category/<str:cate>",views.Category_Books,name='one_category'),
 
     path('category/<str:cate>/', views.category_detail, name='category_detail'),
+
+
+    path('dash/books', views.BookListView.as_view(), name='books'),
+    path('dash/categories/', views.CategoryListView.as_view(), name='categories'),
+    path('dash/authors/', views.AuthorListView.as_view(), name='authors'),
+
+    path('dash/books/add/', views.BookCreateView.as_view(), name='add_book'),
+    path('dash/categories/add/', views.AddCategoryViews.as_view(), name='add_category'),
+    path('dash/authors/add/', views.AddAuthorViews.as_view(), name='add_author'),
+
+    path('dash/books/<int:pk>/edit/', views.BookUpdateViews.as_view(), name='update_book'),
+    path('dash/categories/<int:pk>/edit/', views.CategoryUpdateViews.as_view(), name='update_category'),
+    path('dash/authors/<int:pk>/edit/', views.AuthorUpdateViews.as_view(), name='update_author'),
+
+    path('dash/books/<int:pk>/delete/', views.BookDeleteViews.as_view(), name='delete_book'),
+    path('dash/categories/<int:pk>/delete/', views.CategoryDeleteViews.as_view(), name='delete_category'),
+    path('dash/authors/<int:pk>/delete/', views.AuthorDeleteViews.as_view(), name='delete_author'),
+
+    path('dash/books/<int:pk>/', views.BookDetailViews.as_view(), name='book_detail'),
+    path('dash/categories/<int:pk>/', views.CategoryDetailView.as_view(), name='category_detail'),
+    path('dash/authors/<int:pk>/', views.AuthorDetailView.as_view(), name='author_detail'),
+
 
 ]

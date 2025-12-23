@@ -1,0 +1,82 @@
+{% extends "dash/Base_all.html" %} {% load custom_filter %}
+
+{% block content %}
+
+<h5 style=" text-align: right;"> Welcome <strong style="color: green;">{{user.username}}</strong> 
+<a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right text-danger fs-3 navicon"></i> </a></li>
+</h5>
+ 
+ <h3 style="text-align: center;"> {{ model_name }} List </h3>
+
+ <div class="row " style="width: 100% ;">
+      <div class="col">
+        <nav aria-label="breadcrumb" class="bg-body-tertiary rounded-3 p-4 mb-4">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'dash'%}">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">{{ model_name }} </a></li>
+          
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <!-- <p>oooooWWWooooo {{can_add}}</p> -->
+ {% if can_add %}   
+<a
+  href="{{ add_url }}"
+  class="btn mb-3"
+  style="background: #daa556; color: white; padding: 10px"
+  >Add {{ model_name }} <i class="bi bi-plus" style="padding: 0 5px"></i
+></a>
+{%endif%}
+<table class="table table-striped" >
+  <thead>
+    <tr>
+      {% for header in headers %}
+      <th>{{ header }}</th>
+      {% endfor %}
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in objects %}
+    <tr>
+      {% for column in columns %}
+      
+      {% if column == 'image' %}
+      <td>
+        {% with img=obj|attr:column %}
+         {% if img %}
+        <a href="{% url detail_url obj.id %}"><img src="{{ img.url }}" style="width: 30px" /></a>
+        {% endif %} {% endwith %}
+      </td>
+      {% else %}
+      <td>{{ obj|attr:column }}</td>
+      {% endif %}
+      {%endfor%}
+      <td>
+        <!-- <a href="{{ obj.detail_url }}">View</a> -->
+        {% if can_change %}
+        <a href="{% url update_url obj.id %}"style ="border: 1px solid rgb(127, 248, 127) ;color:rgb(12, 139, 12) ; padding: 5px 22px;  border-radius: 2px;">Edit</a>
+        {%endif%}
+        {% if can_delete %}
+        <a href="{% url delete_url obj.id %}" style ="border: 1px solid rgb(228, 131, 131) ;color:rgb(230, 109, 109) ; padding: 5px 15px; border-radius: 2px;">Delete</a>
+        {%endif%}
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="100%">No data found</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div style="border: 1px solid red;">
+  <h5>permission</h5>
+  <ul>
+ {% for perm in user_permissions_list %}
+    <li>{{ perm }}</li>
+{% endfor %}
+</ul>
+
+</div>
+{% endblock %}

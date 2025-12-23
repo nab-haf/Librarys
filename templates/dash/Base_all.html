@@ -1,0 +1,75 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Index - iPortfolio Bootstrap Template</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'dashboard/img/favicon.png'%}" rel="icon">
+  <link href="{% static 'dashboard/img/apple-touch-icon.png'%}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'dashboard/vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet">
+  <link href="{% static 'dashboard/vendor/bootstrap-icons/bootstrap-icons.css'%}" rel="stylesheet">
+  <link href="{% static 'dashboard/vendor/aos/aos.css'%}" rel="stylesheet">
+  <link href="{% static 'dashboard/vendor/glightbox/css/glightbox.min.css'%}" rel="stylesheet">
+  <link href="{% static 'dashboard/vendor/swiper/swiper-bundle.min.css'}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'dashboard/css/main.css'%}" rel="stylesheet">
+</head>
+<body class="index-page">
+
+  
+<div class="content">
+    <div class="row">
+    <div class="col-lg-3">
+    <header id="header" class="header dark-background d-flex flex-column">
+    <i class="header-toggle d-xl-none bi bi-list"></i>
+    <h5 class="sitename pt-5">DashBoard</h5>
+
+    <div class="profile-img">
+      <img src="/static/dashboard/img/hero-bg.jpg" alt="" class="w-100">
+    </div>
+
+ 
+
+  
+
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="{% url 'dash'%}" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
+        {% if perms.main.view_category %}
+        <li><a href="{% url 'list_cate' %}"><i class="bi bi-list navicon"></i>Categories</a></li>
+        {%endif%}
+
+        {% if perms.main.view_author %}
+        <li><a href="{% url 'list_auth' %}"><i class="bi bi-pencil-square navicon"></i> Authors</a></li>
+        {%endif%}
+
+        {% if perms.main.view_book %}
+        <li><a href="{% url 'book_list' %}"><i class="bi bi-book-half navicon"></i> Books</a></li>
+        {%endif%}
+      </ul>
+    </nav>
+
+  </header>
+    </div>
+    <div class="col-lg-8 pt-5">
+    {% block content %}{% endblock %}
+    </div>
+</div>
+</div>
+</body>
+</html> 
+ 
