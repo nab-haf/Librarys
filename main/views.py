@@ -15,6 +15,7 @@ import base64
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from guardian.shortcuts import  assign_perm,get_objects_for_user
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
@@ -78,19 +79,23 @@ class ListViewGeneric(ListView):
 
         # context['user_permissions_list']=self.request.user.get_all_permissions()
         # permission for all model
-
-        context["can_view"] = self.request.user.has_perm(
+        
+        try:
+             context["can_view"] = self.request.user.has_perm(
                             f"{self.model._meta.app_label}.view_{self.model._meta.model_name}"
                              )
-        context["can_add"] = self.request.user.has_perm(
-                            f"{self.model._meta.app_label}.add_{self.model._meta.model_name}"
+             context["can_add"] = self.request.user.has_perm(
+                                f"{self.model._meta.app_label}.add_{self.model._meta.model_name}"
+                                )
+             context["can_change"] = self.request.user.has_perm(
+                                f"{self.model._meta.app_label}.change_{self.model._meta.model_name}"
+                                )
+             context["can_delete"] = self.request.user.has_perm(
+                                f"{self.model._meta.app_label}.delete_{self.model._meta.model_name}"
                              )
-        context["can_change"] = self.request.user.has_perm(
-                            f"{self.model._meta.app_label}.change_{self.model._meta.model_name}"
-                             )
-        context["can_delete"] = self.request.user.has_perm(
-                            f"{self.model._meta.app_label}.delete_{self.model._meta.model_name}"
-                             )
+        except User.DoesNotExist:
+        
+            context["error"]="Error"
         return context 
 
 
@@ -109,8 +114,8 @@ class BookListView(ListViewGeneric):
     model=Book
     model_name = "Book"
     # columns=['title','author','categ']
-    columns = ["image","title", "author"]
-    headers = [" Book ","Title", "Author"]
+    columns = ["image","title", "author","categ"]
+    headers = [" Book ","Title", "Author","Category"]
     add_url = reverse_lazy("books_add")
     update_url = ("update_book")
     delete_url = ("delete_book")
@@ -133,12 +138,47 @@ class BookListView(ListViewGeneric):
     #     )
     
 
+class UserListView(ListViewGeneric):
+    model=User
+    model_name = "User"
+    columns = ["username","password"]
+    headers = [" Name ","Password"]
+    add_url = reverse_lazy("add_user") 
+    update_url = ("update_user")
+    delete_url = ("delete_user")
+    detail_url = ("user_detail")
+
+class AddUserViews(BaseFormView,CreateView):
+    model=User
+    model_name = "User"
+    list_url_name = 'users' 
+    fields=['username','password']
+    template_name = "dash/base_form.html"
+    success_url = reverse_lazy("users")
+
+def AddUser(request):
+    
+   if (request.POST) :
+    
+    add_form=UserCreationForm(request.POST,request.FILES)
+      
+    if(add_form.is_valid()):
+        
+        add_form.save()
+        return redirect('dash')
+
+   else :
+       add_form=UserCreationForm()
+
+   return render(request,'dash/user_form.html',{'form':add_form})
+
+
 class CategoryListView(ListViewGeneric):
     model=Category
     model_name = "Category"
     columns = ["name"]
     headers = ["Category Name "]
-    add_url = reverse_lazy("add_categ") 
+    add_url = reverse_lazy("add_categories") 
     update_url = ("update_category")
     delete_url = ("delete_category")
     detail_url = ("category_detail")
@@ -155,7 +195,7 @@ class AuthorListView(ListViewGeneric):
    
     columns = ['author','about']
     headers = ['Author Name','About']
-    add_url = reverse_lazy("add_auth") 
+    add_url = reverse_lazy("add_author") 
     update_url = ("update_author")
     delete_url = ("delete_author")
     detail_url = ("author_detail")

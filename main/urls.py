@@ -48,13 +48,15 @@ urlpatterns = [
 
     path('pdf_page/<int:id>', views.pdf_page, name='pdf_page'),
 
-    path('add/',views.book_add,name='add_Book'),
+    # path('add/',views.book_add,name='add_Book'),
 
     path('register/',views.Register,name='Register'),
 
-    path('categ_add',views.categ_add,name='add_categ'),
+    path('dash/user/add/',views.AddUser,name='adduser'),
 
-    path('author_add',views.author_add,name='add_auth'),
+    # path('categ_add',views.categ_add,name='add_categ'),
+
+    # path('author_add',views.author_add,name='add_auth'),
     
     path('profile/<str:name>',views.profile_memb,name='profile'),
 
@@ -63,22 +65,27 @@ urlpatterns = [
     path('category/<str:cate>/', views.category_detail, name='category_detail'),
 
 
+    path('dash/user', views.UserListView.as_view(), name='users'),
     path('dash/books', views.BookListView.as_view(), name='books'),
     path('dash/categories/', views.CategoryListView.as_view(), name='categories'),
     path('dash/authors/', views.AuthorListView.as_view(), name='authors'),
 
-    path('dash/books/add/', views.BookCreateView.as_view(), name='add_book'),
-    path('dash/categories/add/', views.AddCategoryViews.as_view(), name='add_category'),
+    path('dash/user/add/', views.AddUserViews.as_view(), name='add_user'),
+    path('dash/books/add/', views.AddBookViews.as_view(), name='add_book'),
+    path('dash/categories/add/', views.AddCategoryViews.as_view(), name='add_categories'),
     path('dash/authors/add/', views.AddAuthorViews.as_view(), name='add_author'),
 
+    path('dash/user/<int:pk>/edit/', views.BookUpdateViews.as_view(), name='update_user'),
     path('dash/books/<int:pk>/edit/', views.BookUpdateViews.as_view(), name='update_book'),
     path('dash/categories/<int:pk>/edit/', views.CategoryUpdateViews.as_view(), name='update_category'),
     path('dash/authors/<int:pk>/edit/', views.AuthorUpdateViews.as_view(), name='update_author'),
 
+    path('dash/user/<int:pk>/delete/', views.BookDeleteViews.as_view(), name='delete_user'),
     path('dash/books/<int:pk>/delete/', views.BookDeleteViews.as_view(), name='delete_book'),
     path('dash/categories/<int:pk>/delete/', views.CategoryDeleteViews.as_view(), name='delete_category'),
     path('dash/authors/<int:pk>/delete/', views.AuthorDeleteViews.as_view(), name='delete_author'),
 
+    path('dash/user/<int:pk>/', views.BookDetailViews.as_view(), name='user_detail'),
     path('dash/books/<int:pk>/', views.BookDetailViews.as_view(), name='book_detail'),
     path('dash/categories/<int:pk>/', views.CategoryDetailView.as_view(), name='category_detail'),
     path('dash/authors/<int:pk>/', views.AuthorDetailView.as_view(), name='author_detail'),

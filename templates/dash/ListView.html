@@ -19,7 +19,9 @@
         </nav>
       </div>
     </div>
-    <!-- <p>oooooWWWooooo {{can_add}}</p> -->
+    <p>Total : {% get_count   objects %}</p>
+    
+  
  {% if can_add %}   
 <a
   href="{{ add_url }}"
@@ -40,19 +42,30 @@
   <tbody>
     {% for obj in objects %}
     <tr>
-      {% for column in columns %}
-      
-      {% if column == 'image' %}
-      <td>
-        {% with img=obj|attr:column %}
-         {% if img %}
-        <a href="{% url detail_url obj.id %}"><img src="{{ img.url }}" style="width: 30px" /></a>
-        {% endif %} {% endwith %}
-      </td>
-      {% else %}
-      <td>{{ obj|attr:column }}</td>
-      {% endif %}
-      {%endfor%}
+     {% for column in columns %}
+
+  {% if column == 'image' %}
+    <td>
+      {% with img=obj|attr:column %}
+        {% if img %}
+          <a href="{% url detail_url obj.id %}">
+            <img src="{{ img.url }}" style="width: 30px" />
+          </a>
+        {% endif %}
+      {% endwith %}
+    </td>
+
+  {% elif column == 'categ' %}
+    <td>
+      {% view_many_to_many obj.categ.all %}
+    </td>
+
+  {% else %}
+    <td>{{ obj|attr:column }}</td>
+  {% endif %}
+
+{% endfor %}
+
       <td>
         <!-- <a href="{{ obj.detail_url }}">View</a> -->
         {% if can_change %}

@@ -1,16 +1,17 @@
 {%load static%}
+{% load custom_filter %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - iPortfolio Bootstrap Template</title>
+  <title>DashBoard CBV</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{% static 'dashboard/img/favicon.png'%}" rel="icon">
+  <link href="{% static 'dashboard/img/lib.jpg'%}" rel="icon">
   <link href="{% static 'dashboard/img/apple-touch-icon.png'%}" rel="apple-touch-icon">
 
   <!-- Fonts -->
@@ -45,23 +46,9 @@
  
 
   
-
-    <nav id="navmenu" class="navmenu">
-      <ul>
-        <li><a href="{% url 'dash'%}" class="active"><i class="bi bi-house navicon"></i>Home</a></li>
-        {% if perms.main.view_category %}
-        <li><a href="{% url 'list_cate' %}"><i class="bi bi-list navicon"></i>Categories</a></li>
-        {%endif%}
-
-        {% if perms.main.view_author %}
-        <li><a href="{% url 'list_auth' %}"><i class="bi bi-pencil-square navicon"></i> Authors</a></li>
-        {%endif%}
-
-        {% if perms.main.view_book %}
-        <li><a href="{% url 'book_list' %}"><i class="bi bi-book-half navicon"></i> Books</a></li>
-        {%endif%}
-      </ul>
-    </nav>
+    {% block sidebar %}
+    {% sidebar_tag model_name %}
+    {% endblock %}
 
   </header>
     </div>
